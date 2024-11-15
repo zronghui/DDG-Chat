@@ -17,7 +17,13 @@
 
 [<img src="https://vercel.com/button" alt="Deploy on Vercel" height="30">](https://vercel.com/new/clone?repository-url=https://github.com/leafmoes/ddg-chat&project-name=ddg-chat&repository-name=ddg-chat) 
 
-[手动部署](https://github.com/leafmoes/DDG-Chat#手动部署)
+</div>
+
+## 手动部署
+
+<div align="center">
+
+[Vercel](https://github.com/leafmoes/DDG-Chat#vercel) / [Cloudflare Workers](https://github.com/leafmoes/DDG-Chat#cloudflare-workers) / [Docker](https://github.com/leafmoes/DDG-Chat#docker) / [Render](https://github.com/leafmoes/DDG-Chat#render) / [Hugging Face](https://github.com/leafmoes/DDG-Chat#hugging-face) / More Serverless
 
 </div>
 
@@ -126,11 +132,34 @@ npm install
 
 3. 打开文件 /api/index.js ，取消最后一行的注释，然后执行 `npm run publish:cf`
 
+### Hugging Face
+
+1. 创建一个新空间：[Create a new Space ](https://huggingface.co/new-space)
+    ```
+    Space name：ddg-chat
+    License： MIT
+    Select the Space SDK： docker （Blank）
+    Space hardware： free
+    ```
+
+2. 设置环境变量
+    转到 Settings -> Variables and secrets -> Variables 配置环境变量
+    貌似必须设置 `API_PREFIX`，由于抱抱脸的限制？
+    环境变量在帖子里面
+
+3. 编辑 README.md 文件
+    在 metadata 添加 `app_port: 8787` 这个 8787 取决于你 docker 镜像的端口
+
+4. 添加 Dockerfile 文件：
+    ```
+    FROM docker.io/leafmoes/ddg-chat:latest
+    ```
+
 ### Docker
 
 方法一：命令行构建
 ```bash
-docker run -it -d --name ddg-chat -p 8787:8787 ghcr.io/leafmoes/ddg-chat:latest
+docker run -it -d --name ddg-chat -p 8787:8787 leafmoes/ddg-chat:latest
 ```
 
 方法二：使用 `docker-compose.yml` 文件构建
@@ -148,6 +177,8 @@ docker stop ddg-chat # 停止服务
 ## 环境变量
 
 ```bash
+# API 服务使用的端口
+PORT = 8787
 # API 调用的前缀地址
 API_PREFIX = '/'
 # 作为调用 API 验证的 API Key
